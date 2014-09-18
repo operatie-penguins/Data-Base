@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="KISModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="KISModelStoreContainer">
+    <EntitySet Name="Company" EntityType="KISModel.Store.Company" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="CompanyProducts" EntityType="KISModel.Store.CompanyProducts" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Items" EntityType="KISModel.Store.Items" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Plans" EntityType="KISModel.Store.Plans" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Products" EntityType="KISModel.Store.Products" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ProductsList" EntityType="KISModel.Store.ProductsList" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Structure" EntityType="KISModel.Store.Structure" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_CompanyProducts_Company" Association="KISModel.Store.FK_CompanyProducts_Company">
+      <End Role="Company" EntitySet="Company" />
+      <End Role="CompanyProducts" EntitySet="CompanyProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CompanyProducts_Products" Association="KISModel.Store.FK_CompanyProducts_Products">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="CompanyProducts" EntitySet="CompanyProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Plans_Company" Association="KISModel.Store.FK_Plans_Company">
+      <End Role="Company" EntitySet="Company" />
+      <End Role="Plans" EntitySet="Plans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductsList_Plans" Association="KISModel.Store.FK_ProductsList_Plans">
+      <End Role="Plans" EntitySet="Plans" />
+      <End Role="ProductsList" EntitySet="ProductsList" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductsList_Products" Association="KISModel.Store.FK_ProductsList_Products">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="ProductsList" EntitySet="ProductsList" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Structure_Items" Association="KISModel.Store.FK_Structure_Items">
+      <End Role="Items" EntitySet="Items" />
+      <End Role="Structure" EntitySet="Structure" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Structure_Products" Association="KISModel.Store.FK_Structure_Products">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Structure" EntitySet="Structure" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="varchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CompanyProducts">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Company" Type="int" Nullable="false" />
+    <Property Name="Product" Type="int" Nullable="false" />
+    <Property Name="ProuctsNumber" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Items">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="varchar" Nullable="false" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Plans">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Company" Type="int" />
+    <Property Name="DateStart" Type="date" Nullable="false" />
+    <Property Name="DateEnd" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="varchar" Nullable="false" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="ProductsList">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="Plan" Type="int" />
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Product" Type="int" Nullable="false" />
+    <Property Name="ProductsNumber" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Structure">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Item" Type="int" Nullable="false" />
+    <Property Name="Product" Type="int" Nullable="false" />
+    <Property Name="ItemsNumber" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_CompanyProducts_Company">
+    <End Role="Company" Type="KISModel.Store.Company" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CompanyProducts" Type="KISModel.Store.CompanyProducts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CompanyProducts">
+        <PropertyRef Name="Company" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CompanyProducts_Products">
+    <End Role="Products" Type="KISModel.Store.Products" Multiplicity="1" />
+    <End Role="CompanyProducts" Type="KISModel.Store.CompanyProducts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CompanyProducts">
+        <PropertyRef Name="Product" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Plans_Company">
+    <End Role="Company" Type="KISModel.Store.Company" Multiplicity="0..1" />
+    <End Role="Plans" Type="KISModel.Store.Plans" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Plans">
+        <PropertyRef Name="Company" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductsList_Plans">
+    <End Role="Plans" Type="KISModel.Store.Plans" Multiplicity="0..1" />
+    <End Role="ProductsList" Type="KISModel.Store.ProductsList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Plans">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ProductsList">
+        <PropertyRef Name="Plan" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductsList_Products">
+    <End Role="Products" Type="KISModel.Store.Products" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ProductsList" Type="KISModel.Store.ProductsList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ProductsList">
+        <PropertyRef Name="Product" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Structure_Items">
+    <End Role="Items" Type="KISModel.Store.Items" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Structure" Type="KISModel.Store.Structure" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Items">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Structure">
+        <PropertyRef Name="Item" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Structure_Products">
+    <End Role="Products" Type="KISModel.Store.Products" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Structure" Type="KISModel.Store.Structure" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Structure">
+        <PropertyRef Name="Product" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
