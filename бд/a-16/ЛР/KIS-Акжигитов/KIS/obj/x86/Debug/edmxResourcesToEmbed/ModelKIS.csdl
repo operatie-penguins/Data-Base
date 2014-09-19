@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="KISModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+  <EntityContainer Name="KISEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Items" EntityType="KISModel.Item" />
+    <EntitySet Name="Plans" EntityType="KISModel.Plan" />
+    <EntitySet Name="Products" EntityType="KISModel.Product" />
+    <EntitySet Name="ProductsLists" EntityType="KISModel.ProductsList" />
+    <EntitySet Name="Structures" EntityType="KISModel.Structure" />
+    <AssociationSet Name="FK_Structure_Items" Association="KISModel.FK_Structure_Items">
+      <End Role="Items" EntitySet="Items" />
+      <End Role="Structure" EntitySet="Structures" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductsList_Plans" Association="KISModel.FK_ProductsList_Plans">
+      <End Role="Plans" EntitySet="Plans" />
+      <End Role="ProductsList" EntitySet="ProductsLists" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductsList_Products" Association="KISModel.FK_ProductsList_Products">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="ProductsList" EntitySet="ProductsLists" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Structure_Products" Association="KISModel.FK_Structure_Products">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Structure" EntitySet="Structures" />
+    </AssociationSet>
+    <EntitySet Name="Companies" EntityType="KISModel.Company" />
+    <EntitySet Name="CompanyProducts" EntityType="KISModel.CompanyProduct" />
+    <AssociationSet Name="FK_CompanyProducts_Company" Association="KISModel.FK_CompanyProducts_Company">
+      <End Role="Company" EntitySet="Companies" />
+      <End Role="CompanyProduct" EntitySet="CompanyProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CompanyProducts_Products" Association="KISModel.FK_CompanyProducts_Products">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="CompanyProduct" EntitySet="CompanyProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Plans_Company" Association="KISModel.FK_Plans_Company">
+      <End Role="Company" EntitySet="Companies" />
+      <End Role="Plan" EntitySet="Plans" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Item">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="Structures" Relationship="KISModel.FK_Structure_Items" FromRole="Items" ToRole="Structure" />
+  </EntityType>
+  <EntityType Name="Plan">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="ProductsLists" Relationship="KISModel.FK_ProductsList_Plans" FromRole="Plans" ToRole="ProductsList" />
+    <Property Type="Int32" Name="Company" />
+    <NavigationProperty Name="Company1" Relationship="KISModel.FK_Plans_Company" FromRole="Plan" ToRole="Company" />
+    <Property Type="DateTime" Name="DateStart" Nullable="false" />
+    <Property Type="DateTime" Name="DateEnd" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="ProductsLists" Relationship="KISModel.FK_ProductsList_Products" FromRole="Products" ToRole="ProductsList" />
+    <NavigationProperty Name="Structures" Relationship="KISModel.FK_Structure_Products" FromRole="Products" ToRole="Structure" />
+    <NavigationProperty Name="CompanyProducts" Relationship="KISModel.FK_CompanyProducts_Products" FromRole="Product" ToRole="CompanyProduct" />
+  </EntityType>
+  <EntityType Name="ProductsList">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="Plan" Type="Int32" />
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Product" Type="Int32" Nullable="false" />
+    <Property Name="ProductsNumber" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Plan1" Relationship="KISModel.FK_ProductsList_Plans" FromRole="ProductsList" ToRole="Plans" />
+    <NavigationProperty Name="Product1" Relationship="KISModel.FK_ProductsList_Products" FromRole="ProductsList" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="Structure">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Item" Type="Int32" Nullable="false" />
+    <Property Name="Product" Type="Int32" Nullable="false" />
+    <Property Name="ItemsNumber" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Item1" Relationship="KISModel.FK_Structure_Items" FromRole="Structure" ToRole="Items" />
+    <NavigationProperty Name="Product1" Relationship="KISModel.FK_Structure_Products" FromRole="Structure" ToRole="Products" />
+  </EntityType>
+  <Association Name="FK_Structure_Items">
+    <End Role="Items" Type="KISModel.Item" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Structure" Type="KISModel.Structure" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Items">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Structure">
+        <PropertyRef Name="Item" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductsList_Plans">
+    <End Role="Plans" Type="KISModel.Plan" Multiplicity="0..1" />
+    <End Role="ProductsList" Type="KISModel.ProductsList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Plans">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ProductsList">
+        <PropertyRef Name="Plan" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductsList_Products">
+    <End Role="Products" Type="KISModel.Product" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ProductsList" Type="KISModel.ProductsList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ProductsList">
+        <PropertyRef Name="Product" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Structure_Products">
+    <End Role="Products" Type="KISModel.Product" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Structure" Type="KISModel.Structure" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Structure">
+        <PropertyRef Name="Product" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="CompanyProducts" Relationship="KISModel.FK_CompanyProducts_Company" FromRole="Company" ToRole="CompanyProduct" />
+    <NavigationProperty Name="Plans" Relationship="KISModel.FK_Plans_Company" FromRole="Company" ToRole="Plan" />
+  </EntityType>
+  <EntityType Name="CompanyProduct">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="Int32" Name="Company" Nullable="false" />
+    <Property Type="Int32" Name="Product" Nullable="false" />
+    <Property Type="Int32" Name="ProuctsNumber" Nullable="false" />
+    <NavigationProperty Name="Company1" Relationship="KISModel.FK_CompanyProducts_Company" FromRole="CompanyProduct" ToRole="Company" />
+    <NavigationProperty Name="Product1" Relationship="KISModel.FK_CompanyProducts_Products" FromRole="CompanyProduct" ToRole="Product" />
+  </EntityType>
+  <Association Name="FK_CompanyProducts_Company">
+    <End Type="KISModel.Company" Role="Company" Multiplicity="1" />
+    <End Type="KISModel.CompanyProduct" Role="CompanyProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CompanyProduct">
+        <PropertyRef Name="Company" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CompanyProducts_Products">
+    <End Type="KISModel.Product" Role="Product" Multiplicity="1" />
+    <End Type="KISModel.CompanyProduct" Role="CompanyProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CompanyProduct">
+        <PropertyRef Name="Product" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Plans_Company">
+    <End Type="KISModel.Company" Role="Company" Multiplicity="0..1" />
+    <End Type="KISModel.Plan" Role="Plan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Plan">
+        <PropertyRef Name="Company" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
