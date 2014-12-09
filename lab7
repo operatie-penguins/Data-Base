@@ -1,0 +1,24 @@
+mysql> alter table course add Doc varchar(30);
+
+mysql> create table typeDoc (type varchar(30));
+Query OK, 0 rows affected (0.57 sec)
+
+mysql> insert into typeDoc values ('udostoverenie');
+Query OK, 1 row affected (0.11 sec)
+
+mysql> insert into typeDoc values ('diplom');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into typeDoc values ('sertificat');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into typeDoc values ('spravka');
+
+alter table course add foreign key (Doc) references typeDoc(type);
+
+mysql> update course set Doc = 'diplom4';ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`lab1`.`course`, CONSTRAINT `course_ibfk_2` FOREIGN KEY (`Doc`) REFERENCES `typeDoc` (`type`))
+mysql> update course set Doc = 'diplom';
+Query OK, 10 rows affected (0.08 sec)
+Rows matched: 10  Changed: 10  Warnings: 0
+
+

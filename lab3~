@@ -1,0 +1,105 @@
+mysql> select title, cost from course where typcrs = 'easy';
++-------+------+
+| title | cost |
++-------+------+
+| IET   |  900 |
+| IRE   | 1000 |
+| IET   | 1700 |
++-------+------+
+mysql> select title from course where typcrs = 'easy' and cost < 1500 order by title;
++-------+
+| title |
++-------+
+| IET   |
+| IRE   |
++-------+
+mysql> select title from course where typcrs != 'easy' and cost > 1500;+-------+
+| title |
++-------+
+| SQL_1 |
+| SQL_1 |
++-------+
+mysql> select title, hur, typcrs, cost from course where title REGEXP ".*SQL.*" and cost is not NULL;
++----------+------+--------+------+
+| title    | hur  | typcrs | cost |
++----------+------+--------+------+
+| SQL_1    |   17 | pro    |  500 |
+| SQL_true |   24 | norm   |  800 |
+| SQL_1    |   40 | profi  | 2000 |
+| SQL_1    |   35 | norm   | 1700 |
++----------+------+--------+------+
+mysql> select name_stud, cont, discnt from student where org = 'Oblako';
++---------------------+---------------+--------+
+| name_stud           | cont          | discnt |
++---------------------+---------------+--------+
+| Vladimir Kolesnikov | vladobl@ya.ru |      1 |
+| Yuana Ruduia        | Yaobl@ya.ru   |      0 |
++---------------------+---------------+--------+
+mysql> select name_stud, cont, org from student where name_stud regexp "[A-Za-z]* K.*" order by org;
++---------------------+----------------+----------+
+| name_stud           | cont           | org      |
++---------------------+----------------+----------+
+| Mikhail Konov       | kievstar@ya.ru | kievstar |
+| Vladimir Kolesnikov | vladobl@ya.ru  | Oblako   |
++---------------------+----------------+----------+
+mysql> select name_stud, cont, org from student where sx = 'f' and name_stud regexp "^A.*" order by org;
++-----------+-----------+--------+
+| name_stud | cont      | org    |
++-----------+-----------+--------+
+| Anna Rud' | Rud@ya.ru | Rostel |
++-----------+-----------+--------+
+mysql> select * from student where sx = 'f' and org = 'Oblako' and name_stud not regexp "[A-Za-z]*ia .*" and name_stud not regexp "[A-Za-z]*' .*";
++---------+--------------+--------+-------------+--------+--------+--------+------+
+| id_stud | name_stud    | org    | cont        | cty    | cntr   | discnt | sx   |
++---------+--------------+--------+-------------+--------+--------+--------+------+
+|       3 | Yuana Ruduia | Oblako | Yaobl@ya.ru | Moscow | Russia |      0 | f    |
++---------+--------------+--------+-------------+--------+--------+--------+------+
+mysql> select name_stud, cont, org from student where discnt > 0 and discnt < 4 order by name_stud;
++---------------------+----------------+----------+
+| name_stud           | cont           | org      |
++---------------------+----------------+----------+
+| Mikhail Konov       | kievstar@ya.ru | kievstar |
+| Vladimir Kolesnikov | vladobl@ya.ru  | Oblako   |
++---------------------+----------------+----------+
+mysql> select nametch, conttch, degree from tchr where cost_per_hour >= 600 and cost_per_hour <= 900 order by nametch;
++-----------------+-----------+-----------+
+| nametch         | conttch   | degree    |
++-----------------+-----------+-----------+
+| Maria Veskova   | 123-14-55 | professor |
+| Serge' Mokrov   | 123-14-53 | docent    |
+| Vera Sarovskaia | 123-14-57 | none      |
+| Yana Berkova    | 123-14-56 | docent    |
++-----------------+-----------+-----------+
+mysql> select nametch, conttch, cost_per_hour from tchr where degree = 'none' and cost_per_hour > 1000;
++------------+-----------+---------------+
+| nametch    | conttch   | cost_per_hour |
++------------+-----------+---------------+
+| Oleg Torov | 123-14-52 |          1100 |
++------------+-----------+---------------+
+mysql> select * from tchr where sx_tc = 'f' and nametch regexp "[A-Za-z]* B.*" or nametch regexp "[A-Za-z]* V.*";
++--------+---------------+-----------+-------+---------------+-----------+
+| id_tch | nametch       | conttch   | sx_tc | cost_per_hour | degree    |
++--------+---------------+-----------+-------+---------------+-----------+
+|      5 | Maria Veskova | 123-14-55 | f     |           900 | professor |
+|      6 | Yana Berkova  | 123-14-56 | f     |           800 | docent    |
++--------+---------------+-----------+-------+---------------+-----------+
+mysql> select nametch, conttch, cost_per_hour, degree from tchr where degree != 'none' and cost_per_hour < 900 order by nametch;
++---------------+-----------+---------------+--------+
+| nametch       | conttch   | cost_per_hour | degree |
++---------------+-----------+---------------+--------+
+| Serge' Mokrov | 123-14-53 |           700 | docent |
+| Yana Berkova  | 123-14-56 |           800 | docent |
++---------------+-----------+---------------+--------+
+mysql> select nametch, conttch, cost_per_hour, degree from tchr where degree != 'none' and sx_tc = 'm' and nametch regexp "^S.*" order by degree, nametch;
++---------------+-----------+---------------+--------+
+| nametch       | conttch   | cost_per_hour | degree |
++---------------+-----------+---------------+--------+
+| Serge' Mokrov | 123-14-53 |           700 | docent |
++---------------+-----------+---------------+--------+
+mysql> select nametch, conttch, cost_per_hour from tchr where degree != 'none' and cost_per_hour > 1000 and nametch regexp "[A-Za-z]* M.*" order by degree, cost_per_hour;
++----------------+-----------+---------------+
+| nametch        | conttch   | cost_per_hour |
++----------------+-----------+---------------+
+| Grogori' Merov | 123-14-54 |          1300 |
++----------------+-----------+---------------+
+

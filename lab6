@@ -1,0 +1,25 @@
+mysql> create procedure lr1 () begin select s.name_stud, s.cont, crs.title, crs.typcrs from student s, course crs, contract cont where s.id_stud = cont.id_stud and cont.id_crs = crs.id_crs order by s.name_stud; end//
+mysql> call lr1;
+    -> //
++---------------------+----------------+----------+--------+
+| name_stud           | cont           | title    | typcrs |
++---------------------+----------------+----------+--------+
+| Mikhail Konov       | kievstar@ya.ru | AVTU     | pro    |
+| Nikolay Gogol'      | 533-64-72      | SQL_true | norm   |
+| Vladimir Kolesnikov | vladobl@ya.ru  | IRE      | norm   |
+| Yuana Ruduia        | Yaobl@ya.ru    | IET      | easy   |
++---------------------+----------------+----------+--------+
+
+
+
+mysql> create procedure lr2 (in id_stud integer, out costcourses integer) begin select sum(course.cost) into costcourses from contract, course where contract.id_stud = id_stud and contract.id_crs = course.id_crs; end//
+
+mysql> call lr2(2, @cost2);//
+
+mysql> select @cost2;//
++--------+
+| @cost2 |
++--------+
+|    700 |
++--------+
+

@@ -1,0 +1,19 @@
+mysql> alter table contract add foreign key (id_crs) references course (id_crs) on update restrict;
+Query OK, 4 rows affected (0.66 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> delete from course where id_crs = 3;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`lab1`.`contract`, CONSTRAINT `contract_ibfk_3` FOREIGN KEY (`id_crs`) REFERENCES `course` (`id_crs`))
+
+mysql> create trigger upd_sale after insert on contract for each row begin 
+    -> set @minsale = (select min(course.cost) from course, contract where course.id_crs = contract.id_crs and new.id_stud = contract.id_stud);
+    -> set @maxsale = (select min(course.cost) from course, contract where course.id_crs = contract.id_crs and new.id_stud = contract.id_stud);
+    -> if @minsale > 50000 and @maxsale < 70000 then update student set discnt = 5 where new.id_stud = student.id_stud;
+    -> else if @minsale > 70000 and @maxsale < 80000 then update student set discnt = 10 where new.id_stud = student.id_stud;
+    -> else if @minsale > 100000 then update student set discnt = 15 where new.id_stud = student.id_stud;
+    -> end if;
+    -> end if;
+    -> end if;
+    -> end
+    -> //
+

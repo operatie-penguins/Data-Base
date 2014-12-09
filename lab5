@@ -1,0 +1,115 @@
+mysql> select s.name_stud, s.cont, crs.title, crs.typcrs from student s, course crs, contract cont where s.id_stud = cont.id_stud and cont.id_crs = crs.id_crs order by s.name_stud;
++---------------------+----------------+----------+--------+
+| name_stud           | cont           | title    | typcrs |
++---------------------+----------------+----------+--------+
+| Mikhail Konov       | kievstar@ya.ru | AVTU     | pro    |
+| Nikolay Gogol'      | 533-64-72      | SQL_true | norm   |
+| Vladimir Kolesnikov | vladobl@ya.ru  | IRE      | norm   |
+| Yuana Ruduia        | Yaobl@ya.ru    | IET      | easy   |
++---------------------+----------------+----------+--------+
+
+mysql> select s.name_stud, crs.title, crs.typcrs, crs.cost from student s, course crs, contract cont where s.id_stud = cont.id_stud and cont.id_crs = crs.id_crs and crs.cost < 1500 and crs.typcrs = 'easy' order by crs.title, s.name_stud;
++--------------+-------+--------+------+
+| name_stud    | title | typcrs | cost |
++--------------+-------+--------+------+
+| Yuana Ruduia | IET   | easy   |  900 |
++--------------+-------+--------+------+
+
+mysql> select s.name_stud, crs.title, crs.cost from student s, course crs, contract cont where s.id_stud = cont.id_stud and cont.id_crs = crs.id_crs and s.name_stud regexp '[A-Za-z]* K.*' order by crs.cost;
++---------------------+-------+------+
+| name_stud           | title | cost |
++---------------------+-------+------+
+| Mikhail Konov       | AVTU  |  600 |
+| Vladimir Kolesnikov | IRE   |  700 |
++---------------------+-------+------+
+
+mysql> select crs.title, crs.hur, crs.typcrs, s.name_stud, s.cont from student s, course crs, contract cont, tchr t where s.id_stud = cont.id_stud and cont.id_crs = crs.id_crs and t.id_tch = crs.id_tch and t.id_tch = 2 order by crs.title, s.name_stud;
++----------+------+--------+----------------+-----------+
+| title    | hur  | typcrs | name_stud      | cont      |
++----------+------+--------+----------------+-----------+
+| SQL_true |   24 | norm   | Nikolay Gogol' | 533-64-72 |
++----------+------+--------+----------------+-----------+
+
+mysql> select crs.title, crs.hur, crs.typcrs, s.name_stud, s.cont from student s, course crs, contract cont where s.id_stud = cont.id_stud and cont.id_crs = crs.id_crs and s.org = 'Oblako' order by crs.title, s.name_stud;
++-------+------+--------+---------------------+---------------+
+| title | hur  | typcrs | name_stud           | cont          |
++-------+------+--------+---------------------+---------------+
+| IET   |   21 | easy   | Yuana Ruduia        | Yaobl@ya.ru   |
+| IRE   |   98 | norm   | Vladimir Kolesnikov | vladobl@ya.ru |
++-------+------+--------+---------------------+---------------+
+
+mysql> select crs.title, crs.cost, s.name_stud, s.cont, s.org from student s, course crs, contract cont where s.id_stud = cont.id_stud and cont.id_crs = crs.id_crs and s.name_stud regexp '[A-Za-z]* R.*' and crs.typcrs = 'easy' order by s.org, s.name_stud;
++-------+------+--------------+-------------+--------+
+| title | cost | name_stud    | cont        | org    |
++-------+------+--------------+-------------+--------+
+| IET   |  900 | Yuana Ruduia | Yaobl@ya.ru | Oblako |
++-------+------+--------------+-------------+--------+
+
+mysql> select crs.title, crs.typcrs, crs.cost, crs.hur from course crs where crs.cost > (select avg(crs.cost) from course crs);
++-------+--------+------+------+
+| title | typcrs | cost | hur  |
++-------+--------+------+------+
+| SQL_1 | profi  | 2000 |   40 |
+| SQL_1 | norm   | 1700 |   35 |
+| IET   | easy   | 1700 |   38 |
++-------+--------+------+------+
+
+mysql> select crs.title, crs.typcrs, crs.cost, crs.hur from course crs where crs.hur = (select max(crs.hur) from course crs);
++-------+--------+------+------+
+| title | typcrs | cost | hur  |
++-------+--------+------+------+
+| IRE   | norm   |  700 |   98 |
++-------+--------+------+------+
+
+mysql> select name_stud, cont, org from student where discnt = (select max(discnt) from student);
++----------------+-----------+----------+
+| name_stud      | cont      | org      |
++----------------+-----------+----------+
+| Nikolay Gogol' | 533-64-72 | Repushko |
++----------------+-----------+----------+
+
+mysql> select nametch, conttch, degree from tchr where cost_per_hour > (select avg(cost_per_hour) from tchr);
++----------------+-----------+-----------+
+| nametch        | conttch   | degree    |
++----------------+-----------+-----------+
+| Oleg Torov     | 123-14-52 | none      |
+| Grogori' Merov | 123-14-54 | professor |
+| Maria Veskova  | 123-14-55 | professor |
++----------------+-----------+-----------+
+
+select s.name_stud, s.cont, c.title, c.cost from student s, contract ct, course c where  s.id_stud = ct.id_stud and ct.id_crs = c.id_crs and c.cost = (select max(cost) from course) order by s.name_stud;
+Empty set (0.01 sec)
+
+select t.nametch, cr.title, cr.typcrs, cr.hur from tchr t, course cr where t.id_tch = cr.id_tch and title like '%SQL%' order by t.nametch;
++----------------+----------+--------+------+
+| nametch        | title    | typcrs | hur  |
++----------------+----------+--------+------+
+| Grogori' Merov | SQL_1    | profi  |   40 |
+| Grogori' Merov | SQL_1    | norm   |   35 |
+| Grogori' Merov | SQL_1    | pro    |   17 |
+| Oleg Torov     | SQL_true | norm   |   24 |
++----------------+----------+--------+------+
+
+
+mysql> select t.nametch, t.conttch, t.degree, cr.title, cr.cost from tchr t, course cr where t.id_tch = cr.id_tch and t.degree != 'none' and cr.hur > 36 order by t.nametch;
++----------------+-----------+-----------+-------+------+
+| nametch        | conttch   | degree    | title | cost |
++----------------+-----------+-----------+-------+------+
+| Grogori' Merov | 123-14-54 | professor | SQL_1 | 2000 |
++----------------+-----------+-----------+-------+------+
+
+mysql> select t.nametch, t.conttch, t.degree, t.cost_per_hour from tchr t where t.sx_tc = 'm' and t.degree != 'none' and t.cost_per_hour < (select avg(cost_per_hour) from tchr) order by t.degree, t.nametch;
++---------------+-----------+--------+---------------+
+| nametch       | conttch   | degree | cost_per_hour |
++---------------+-----------+--------+---------------+
+| Serge' Mokrov | 123-14-53 | docent |           700 |
++---------------+-----------+--------+---------------+
+
+mysql> select tchr.nametch, tchr.conttch, tchr.cost_per_hour, course.title, course.cost from tchr, course where tchr.degree != 'none' and tchr.cost_per_hour > 300 and tchr.id_tch = course.id_tch and course.typcrs = 'easy' order by tchr.degree, tchr.cost_per_hour;
++---------------+-----------+---------------+-------+------+
+| nametch       | conttch   | cost_per_hour | title | cost |
++---------------+-----------+---------------+-------+------+
+| Serge' Mokrov | 123-14-53 |           700 | IRE   | 1000 |
+| Serge' Mokrov | 123-14-53 |           700 | IET   |  900 |
++---------------+-----------+---------------+-------+------+
+

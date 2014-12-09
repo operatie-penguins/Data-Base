@@ -1,0 +1,2 @@
+mysql> alter table course add Doc varchar(30);
+

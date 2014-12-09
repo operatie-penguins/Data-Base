@@ -1,0 +1,8 @@
+mysql> alter table contract add foreign key (id_crs) references course (id_crs) on update restrict;
+Query OK, 4 rows affected (0.66 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> delete from course where id_crs = 3;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`lab1`.`contract`, CONSTRAINT `contract_ibfk_3` FOREIGN KEY (`id_crs`) REFERENCES `course` (`id_crs`))
+
+

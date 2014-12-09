@@ -1,0 +1,166 @@
+mysql> select count(typcrs) as count_course from course;
++--------------+
+| count_course |
++--------------+
+|            9 |
++--------------+
+mysql> select typcrs, count(typcrs) as count from course group by typcrs;
++--------+-------+
+| typcrs | count |
++--------+-------+
+| easy   |     3 |
+| norm   |     3 |
+| pro    |     2 |
+| profi  |     1 |
++--------+-------+
+
+
+mysql> select count(id_stud) as countStudent from student;
++--------------+
+| countStudent |
++--------------+
+|            5 |
++--------------+
+mysql> select cty, count(cty) as countFromCity from student group by cty;
++---------+---------------+
+| cty     | countFromCity |
++---------+---------------+
+| Kiev    |             1 |
+| Moscow  |             3 |
+| Vologda |             1 |
++---------+---------------+
+
+
+mysql> select count(id_tch) as countTeachers from tchr;
++---------------+
+| countTeachers |
++---------------+
+|             7 |
++---------------+
+mysql> select degree, count(id_tch) as countTchrs from tchr group by degree;
++-----------+------------+
+| degree    | countTchrs |
++-----------+------------+
+| docent    |          2 |
+| none      |          3 |
+| professor |          2 |
++-----------+------------+
+
+
+mysql> select count(id_tch) as countTeachers from tchr;
++---------------+
+| countTeachers |
++---------------+
+|             7 |
++---------------+
+mysql> select cost_per_hour, count(id_tch) as countTchrs from tchr group by cost_per_hour;
++---------------+------------+
+| cost_per_hour | countTchrs |
++---------------+------------+
+|           500 |          1 |
+|           700 |          1 |
+|           800 |          2 |
+|           900 |          1 |
+|          1100 |          1 |
+|          1300 |          1 |
++---------------+------------+
+
+
+mysql> select count(id_crs) as all_course from course;
++------------+
+| all_course |
++------------+
+|          9 |
++------------+
+mysql> select hur, count(hur) as count_course from course group by hur;
++------+--------------+
+| hur  | count_course |
++------+--------------+
+|   17 |            1 |
+|   18 |            1 |
+|   20 |            1 |
+|   21 |            1 |
+|   24 |            1 |
+|   35 |            1 |
+|   38 |            1 |
+|   40 |            1 |
+|   98 |            1 |
++------+--------------+
+
+
+mysql> select count(id_crs) as all_course from course;
++------------+
+| all_course |
++------------+
+|          9 |
++------------+
+mysql> select typcrs, max(cost) as max_cost from course group by typcrs;
++--------+----------+
+| typcrs | max_cost |
++--------+----------+
+| easy   |     1700 |
+| norm   |     1700 |
+| pro    |      600 |
+| profi  |     2000 |
++--------+----------+
+
+
+mysql> select count(id_crs) as all_course from course;
++------------+
+| all_course |
++------------+
+|          9 |
++------------+
+mysql> select typcrs, count(id_crs), avg(cost) as avg_cost from course group by typcrs;
++--------+---------------+-----------+
+| typcrs | count(id_crs) | avg_cost  |
++--------+---------------+-----------+
+| easy   |             3 | 1200.0000 |
+| norm   |             3 | 1066.6667 |
+| pro    |             2 |  550.0000 |
+| profi  |             1 | 2000.0000 |
++--------+---------------+-----------+
+
+
+mysql> select count(id_tch) as countTeachers from tchr;
++---------------+
+| countTeachers |
++---------------+
+|             7 |
++---------------+
+mysql> select degree, min(cost_per_hour) as min_cost, max(cost_per_hour) as max_cost from tchr group by degree;
++-----------+----------+----------+
+| degree    | min_cost | max_cost |
++-----------+----------+----------+
+| docent    |      700 |      800 |
+| none      |      500 |     1100 |
+| professor |      900 |     1300 |
++-----------+----------+----------+
+
+
+mysql> select degree, avg(cost_per_hour) as avg_cost from tchr group by degree;
++-----------+-----------+
+| degree    | avg_cost  |
++-----------+-----------+
+| docent    |  750.0000 |
+| none      |  800.0000 |
+| professor | 1100.0000 |
++-----------+-----------+
+
+
+mysql> select count(id_stud) as countStudent from student;
++--------------+
+| countStudent |
++--------------+
+|            5 |
++--------------+
+mysql> select discnt, count(id_stud) as count_stud from student group by discnt;
++--------+------------+
+| discnt | count_stud |
++--------+------------+
+|      0 |          1 |
+|      1 |          1 |
+|      3 |          1 |
+|      4 |          1 |
+|     15 |          1 |
++--------+------------+

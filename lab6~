@@ -1,0 +1,11 @@
+mysql> create procedure lr2 (in id_stud integer, out costcourses integer) begin select sum(course.cost) into costcourses from contract, course where contract.id_stud = id_stud and contract.id_crs = course.id_crs; end//
+
+mysql> call lr2(2, @cost2);//
+
+mysql> select @cost2;//
++--------+
+| @cost2 |
++--------+
+|    700 |
++--------+
+
